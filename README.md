@@ -11,6 +11,15 @@ The goal of this lab is to showcase how modern DevOps tools can be combined to:
 - Leverage JFrog Artifactory for artifact management and promotion
 - Deploy process applications or services to IBM BAW environments via REST APIs or CLI
 
+## 📚 Official Documentation
+
+This lab is based on the official IBM guidance for continuous integration pipelines:
+
+- [Integrating GitHub with IBM BAW](https://www.ibm.com/docs/en/baw/25.0.0?topic=cpci-integrating-github)
+- [Integrating JFrog Artifactory with IBM BAW](https://www.ibm.com/docs/en/baw/25.0.0?topic=cpci-integrating-jfrog-artifactory)
+
+These pages explain how IBM BAW interacts with source control and artifact repositories to support automated deployment flows.
+
 ## 🧱 Architecture Overview
 
 Developer Push →
@@ -18,7 +27,6 @@ GitHub Action →
 Build + Create BAW artifact (.twx or .jar) →
 Publish to JFrog Artifactory →
 Trigger deployment to IBM BAW (Dev/Test/Prod)
-
 
 
 ## 🧪 What You’ll Learn
