@@ -1,15 +1,14 @@
-# GitHub – JFrog – IBM BAW Integration Lab
+# GitHub Actions – IBM BAW Integration Lab
 
-This repository demonstrates how to integrate GitHub, JFrog Artifactory, and IBM Business Automation Workflow (BAW) into a unified CI/CD pipeline.
+This repository demonstrates how to use GitHub Actions to automate CI/CD workflows for IBM Business Automation Workflow (BAW) projects.
 
 ## 🔍 Purpose
 
-The goal of this lab is to showcase how modern DevOps tools can be combined to:
+The goal of this lab is to show how GitHub Actions can be used to:
 
-- Store and version BAW-related artifacts (e.g., .twx files, service libraries, scripts)
-- Automate build and deployment pipelines using GitHub Actions
-- Leverage JFrog Artifactory for artifact management and promotion
-- Deploy process applications or services to IBM BAW environments via REST APIs or CLI
+- Build and package BAW artifacts (e.g., .twx files)
+- Automate deployment steps to IBM BAW environments
+- Enable continuous integration for BAW development
 
 ## 📚 Official Documentation
 
@@ -20,45 +19,69 @@ This lab is based on the official IBM guidance for continuous integration pipeli
 
 These pages explain how IBM BAW interacts with source control and artifact repositories to support automated deployment flows.
 
-## 🧱 Architecture Overview
+## 🧪 Example Workflow
 
-Developer Push →
-GitHub Action →
-Build + Create BAW artifact (.twx or .jar) →
-Publish to JFrog Artifactory →
-Trigger deployment to IBM BAW (Dev/Test/Prod)
+The main workflow for this lab is defined in `.github/workflows/test-workflow.yml`:
 
+```yaml
+name: CI/CD for BAW Project 
 
-## 🧪 What You’ll Learn
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'workflow/CO/**.json'
+  workflow_dispatch:
 
-- How to configure GitHub Actions with JFrog CLI
-- How to publish and retrieve artifacts from JFrog
-- How to deploy to IBM BAW using automated scripts or APIs
-- Best practices for CI/CD in automation workflows
+jobs:
+  install_package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        id: checkout_code
+        uses: actions/checkout@v4
+
+      - name: Welcome message
+        id: welcome_message
+        run: |
+          echo "::group::My Group"
+          echo "🎉 Showcase of CI/CD pipeline in the BAW project "
+          echo "=== BAW Package Installation ==="
+          echo "Date: $(date)"
+          echo "::endgroup::"
+      - name: Extract values from json file
+        id: extract_json
+        run: ...
+      - name: Get CSRF token
+        id: csrf_token
+        run: ...
+      - name: Download the package
+        id: download_package  
+        run: ....     
+      - name: Install the package
+        id: install_package
+        run: ...
+
+```
 
 ## 🧰 Tech Stack
 
 - GitHub Actions
-- JFrog Artifactory
 - IBM Business Automation Workflow (BAW)
 - Bash / Shell scripts
-- (Optional) Docker or Kubernetes if BAW is containerized
-
+- Act toolkit
 
 ## ⚠️ Prerequisites
 
-- Access to a JFrog Artifactory instance
 - IBM BAW installed or provisioned (local, cloud, or containerized)
 - GitHub repository with access to GitHub Actions
-- JFrog CLI installed in CI agents
-- API token or credentials with permission to upload artifacts
 
 ## 🧭 Getting Started
 
 1. Fork or clone this repo
-2. Configure secrets (`JFROG_URL`, `JFROG_USER`, `JFROG_PASSWORD`)
-3. Push a change or manually trigger a GitHub Action
-4. Monitor artifact upload and deployment steps
+2. Review and adapt `.github/workflows/test-workflow.yml` as needed
+3. Push a change or manually trigger the workflow
+4. Monitor build and deployment steps in the Actions tab
 
 ## 📌 License
 
