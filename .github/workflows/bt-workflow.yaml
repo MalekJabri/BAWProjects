@@ -1,0 +1,40 @@
+name: CI/CD for BAW Project 
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'workflow/CO/**.json'
+  workflow_dispatch:
+
+jobs:
+  install_package:
+    runs-on: ubuntu-latest
+    env:
+      ZEN_API_KEY: ${{ secrets.ZEN_API_KEY }}
+    steps:
+        - name: Welcom Message
+          run : |
+            echo "Welcome to CI/CD "
+        - name: Checkout code
+          uses: actions/checkout@v4
+        - name: List Folders
+          run : |
+            ls -l
+        - name: Extract values from json file
+          run: |
+            newest_json=$(ls -t workflow/CO/*.json | head -n 1)
+            server_url=$(jq -r '.server_url' $newest_json)
+            snapshot_acronym=$(jq -r '.snapshot_acronym' $newest_json)
+            project_short_name=$( jq -r '.project_short_name' $newest_json)
+            snapshot_description=$( jq -r '.snapshot_description' $newest_json)
+            snapshot_name=$( jq -r '.snapshot_name' $newest_json)
+            project_name=$( jq -r '.project_name' $newest_json)
+            echo "server_url=$server_url" >> $GITHUB_OUTPUT
+            echo "snapshot_acronym=$snapshot_acronym" >> $GITHUB_OUTPUT
+            echo "project_short_name=$project_short_name" >> $GITHUB_OUTPUT
+            echo "snapshot_description=$snapshot_description" >> $GITHUB_OUTPUT
+            echo "snapshot_name=$snapshot_name" >> $GITHUB_OUTPUT
+            echo "project_name=$project_name" >> $GITHUB_OUTPUT
+            echo "Project Name: $project_name"
+            echo $ZEN_API_KEY
