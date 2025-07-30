@@ -31,6 +31,8 @@ on:
 jobs:
   install_package:
     runs-on: ubuntu-latest
+    env:
+      ZEN_API_KEY: ${{ secrets.ZEN_API_KEY }}
     steps:
         - name: Welcom Message
           run : |
