@@ -8,12 +8,37 @@ This workflow automates the process of installing an IBM Business Automation Wor
 
 The workflow is triggered when:
 
-- A file matching `workflow/CO/**.json` is pushed to the `main` branch.
+- A file matching `workflow/CO/**.json` is pushed to the `main` branch. CO represent the baw application short name.
 - Or manually via the `workflow_dispatch` button on GitHub.
 
 ---
 
+## Create a new workflow file
+
+Create a new file in teh folder .github/workflows/userid-workflow.yaml
+Copy the following section and update the name of the project.
+
+```yaml
+name: CI/CD for BAW Project 
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'workflow/CO/**.json'
+  workflow_dispatch:
+
+jobs:
+  install_package:
+    runs-on: ubuntu-latest
+    steps:
+```
+
+---
+
+
 ## 🧪  Workflow Steps
+
 
 ### 🧩 1. Checkout Repository
 
@@ -170,5 +195,5 @@ The workflow is triggered when:
     break
     fi
     sleep 10
-    done
+    done 
 ```
