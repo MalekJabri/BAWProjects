@@ -52,7 +52,7 @@ jobs:
           uses: actions/checkout@v4
         - name: List Folders
           run : |
-            ls -l
+            ls -la
 ```
 
 ### 🧾 2. Extract Parameters from JSON
@@ -83,7 +83,7 @@ jobs:
           run: |
             echo "Project Name: ${{ steps.extract_json.outputs.project_name }}"
             response=$(curl -s -X POST ${{ steps.extract_json.outputs.server_url }}/bas/ops/system/login \
-            -H "Authorization: ZenApiKey ${{ secrets.MY_SECRET }}" \
+            -H "Authorization: ZenApiKey $ZEN_API_KEY" \
             -H "Content-Type: application/json" \
             -d '{ "refresh_groups": true, "requested_lifetime": 7200}')
             echo "Response: $response"
@@ -101,7 +101,7 @@ jobs:
             echo "Project Name: ${{ steps.extract_json.outputs.project_name }}"
             echo "Create Package for the following profile : ${{ secrets.target_profile }}"
             response=$(curl -s -X POST ${{ steps.extract_json.outputs.server_url }}/bas/ops/std/bpm/containers/${{ steps.extract_json.outputs.project_short_name }}/versions/${{ steps.extract_json.outputs.snapshot_acronym }}/offline_package?server=${{ secrets.target_profile }} \
-            -H "Authorization: ZenApiKey ${{ secrets.MY_SECRET }}" \
+            -H "Authorization: ZenApiKey $ZEN_API_KEY" \
             -H "Content-Type: application/json" \
             -H "BPMCSRFToken: ${{ steps.csrf_token.outputs.csrfkey }}" )
             echo "Response: $response"
@@ -120,7 +120,7 @@ jobs:
             end=$((SECONDS+240))
             while true; do
             response=$(curl -s -X GET ${{ steps.create_package.outputs.joburl }} \
-            -H "Authorization: ZenApiKey ${{ secrets.MY_SECRET }}" \
+            -H "Authorization: ZenApiKey $ZEN_API_KEY" \
             -H "Content-Type: application/json" \
             -H "BPMCSRFToken: ${{ steps.csrf_token.outputs.csrfkey }}" )
             echo "Response: $response"
@@ -152,7 +152,7 @@ jobs:
             echo "Job URL  : ${{ steps.extract_json.outputs.server_url }}/bas/ops/std/bpm/containers/${{ steps.extract_json.outputs.project_short_name }}/versions/${{ steps.extract_json.outputs.snapshot_acronym }}/install_package?server=Production"      
             curl -X GET ${{ steps.extract_json.outputs.server_url }}/bas/ops/std/bpm/containers/${{ steps.extract_json.outputs.project_short_name }}/versions/${{ steps.extract_json.outputs.snapshot_acronym }}/install_package?server=Production \
             -o workflow/CO/${{ steps.extract_json.outputs.snapshot_acronym }}_Installpck.zip \
-            -H "Authorization: ZenApiKey ${{ secrets.MY_SECRET }}" \
+            -H "Authorization: ZenApiKey $ZEN_API_KEY" \
             -H "BPMCSRFToken: ${{ steps.csrf_token.outputs.csrfkey }}" \
             -H "Accept: application/octet-stream"   
             echo "Package downloaded successfully."   
@@ -167,7 +167,7 @@ jobs:
             echo "Install the package in the server"
             echo "Project Name: ${{ steps.extract_json.outputs.project_name }}"
             response=$(curl -X POST "${{ steps.extract_json.outputs.server_url }}/bas/ops/std/bpm/containers/install?inactive=false&caseOverwrite=false" -F 'install_file=@workflow/CO/${{ steps.extract_json.outputs.snapshot_acronym }}_Installpck.zip' \
-            -H "Authorization: ZenApiKey ${{ secrets.MY_SECRET }}" \
+            -H "Authorization: ZenApiKey $ZEN_API_KEY" \
             -H "Accept: application/json" \
             -H "BPMCSRFToken: ${{ steps.csrf_token.outputs.csrfkey }}" )
             echo "Response: $response"
@@ -185,7 +185,7 @@ jobs:
             end=$((SECONDS+240))
             while true; do
             response=$(curl -s -X GET ${{ steps.install_package.outputs.joburl }} \
-            -H "Authorization: ZenApiKey ${{ secrets.MY_SECRET }}" \
+            -H "Authorization: ZenApiKey $ZEN_API_KEY" \
             -H "Content-Type: application/json" \
             -H "BPMCSRFToken: ${{ steps.csrf_token.outputs.csrfkey }}" )
             echo "Response: $response"

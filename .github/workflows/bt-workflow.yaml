@@ -1,10 +1,6 @@
 name: CI/CD for BAW Project 
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'workflow/CO/**.json'
   workflow_dispatch:
 
 jobs:
@@ -20,7 +16,8 @@ jobs:
           uses: actions/checkout@v4
         - name: List Folders
           run : |
-            ls -l
+            ls -la
+            echo $test
         - name: Extract values from json file
           run: |
             newest_json=$(ls -t workflow/CO/*.json | head -n 1)
@@ -38,3 +35,14 @@ jobs:
             echo "project_name=$project_name" >> $GITHUB_OUTPUT
             echo "Project Name: $project_name"
             echo $ZEN_API_KEY
+        - name: Get CSRF token
+          run: |
+            echo "Project Name: ${{ steps.extract_json.outputs.project_name }}"
+            response=$(curl -s -X POST ${{ steps.extract_json.outputs.server_url }}/bas/ops/system/login \
+            -H "Authorization: ZenApiKey $ZEN_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{ "refresh_groups": true, "requested_lifetime": 7200}')
+            echo "Response: $response"
+            csrfkey=$(echo "$response" | jq -r '.csrf_token')
+            echo "Extracted csrfkey: $csrfkey"
+            echo "csrfkey=$csrfkey" >> $GITHUB_OUTPUT
