@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'workflow/CO/**.json'
+      - 'workflow/EMAARS/**.json'
   workflow_dispatch:
 
 jobs:
@@ -48,6 +48,7 @@ jobs:
         id: csrf_token
         run: |
           echo "Project Name: ${{ steps.extract_json.outputs.project_name }}"
+          echo "url: ${{ steps.extract_json.outputs.server_url }}"
           response=$(curl -s -X POST ${{ steps.extract_json.outputs.server_url }}/bas/ops/system/login \
             -H "Authorization: ZenApiKey $ZEN_API_KEY" \
             -H "Content-Type: application/json" \
@@ -115,7 +116,7 @@ jobs:
         run: |
           echo "Install the package in the server"
           echo "Project Name: ${{ steps.extract_json.outputs.project_name }}"
-          response=$(curl -X POST "${{ steps.extract_json.outputs.server_url }}/wfpsruntime-sample-wfps/ops/std/bpm/containers/install?inactive=false&caseOverwrite=false" -F 'install_file=@workflow/CO/${{ steps.extract_json.outputs.snapshot_acronym }}_Installpck.zip' \
+          response=$(curl -X POST "${{ steps.extract_json.outputs.server_url }}/bas/ops/std/bpm/containers/install?inactive=false&caseOverwrite=false" -F 'install_file=@workflow/CO/${{ steps.extract_json.outputs.snapshot_acronym }}_Installpck.zip' \
             -H "Authorization: ZenApiKey $ZEN_API_KEY" \
             -H "Accept: application/json" \
             -H "BPMCSRFToken: ${{ steps.csrf_token.outputs.csrfkey }}" )
