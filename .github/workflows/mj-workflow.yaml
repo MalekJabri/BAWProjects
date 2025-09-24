@@ -1,4 +1,4 @@
-name: CI/CD for BAW Project 
+name: CI/CD for EMAARS Project 
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
           echo "=== BAW Package Installation ==="
           echo "Date: $(date)"
           echo "::group::My Group"
-          newest_json=$(ls -t workflow/CO/*.json | head -n 1)
+          newest_json=$(ls -t workflow/EMAARS/*.json | head -n 1)
           echo "Extract information from the JSON file: $newest_json"
           server_url=$(jq -r '.server_url' $newest_json)
           snapshot_acronym=$(jq -r '.snapshot_acronym' $newest_json )
