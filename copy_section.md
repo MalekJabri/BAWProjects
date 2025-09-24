@@ -166,7 +166,7 @@ jobs:
           run: |
             echo "Install the package in the server"
             echo "Project Name: ${{ steps.extract_json.outputs.project_name }}"
-            response=$(curl -X POST "${{ steps.extract_json.outputs.server_url }}/bas/ops/std/bpm/containers/install?inactive=false&caseOverwrite=false" -F 'install_file=@workflow/CO/${{ steps.extract_json.outputs.snapshot_acronym }}_Installpck.zip' \
+            response=$(curl -X POST "${{ steps.extract_json.outputs.server_url }}/wfpsruntime-sample-wfps/ops/std/bpm/containers/install?inactive=false&caseOverwrite=false" -F 'install_file=@workflow/CO/${{ steps.extract_json.outputs.snapshot_acronym }}_Installpck.zip' \
             -H "Authorization: ZenApiKey $ZEN_API_KEY" \
             -H "Accept: application/json" \
             -H "BPMCSRFToken: ${{ steps.csrf_token.outputs.csrfkey }}" )
