@@ -142,12 +142,11 @@ jobs:
           fi
             if [[ "$state" == "failure" ]]; then
               echo "Package installation failed."
-              exit 1
+              break
             fi
           if (( SECONDS >= end )); then
             echo "Timeout reached (4 minutes). Exiting loop."
-             exit 1
-            break
+            exit 1
           fi
           sleep 10
           done
