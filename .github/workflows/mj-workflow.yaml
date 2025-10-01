@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'workflow/EMAARS/**.json'
+      - 'workflow/MJGI/**.json'
   workflow_dispatch:
 
 jobs:
@@ -19,7 +19,7 @@ jobs:
       - name: Extract values from json file
         id: extract_json
         run: |
-          echo "🎉 Showcase of CI/CD pipeline in the BAW project "
+          echo "🎉 Showcase of CI/CD pipeline in the T3 EVENT  project "
           echo "=== BAW Package Installation ==="
           echo "Date: $(date)"
           echo "::group::My Group"
@@ -142,7 +142,7 @@ jobs:
           fi
             if [[ "$state" == "failure" ]]; then
               echo "Package installation failed."
-              break
+              exit 1
             fi
           if (( SECONDS >= end )); then
             echo "Timeout reached (4 minutes). Exiting loop."
