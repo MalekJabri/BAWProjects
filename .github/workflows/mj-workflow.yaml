@@ -106,7 +106,7 @@ jobs:
         run: |
           echo "Job URL  : ${{ steps.extract_json.outputs.server_url }}/bas/ops/std/bpm/containers/${{ steps.extract_json.outputs.project_short_name }}/versions/${{ steps.extract_json.outputs.snapshot_acronym }}/install_package?server=Production"      
           curl -X GET ${{ steps.extract_json.outputs.server_url }}/bas/ops/std/bpm/containers/${{ steps.extract_json.outputs.project_short_name }}/versions/${{ steps.extract_json.outputs.snapshot_acronym }}/install_package?server=Production \
-            -o workflow/CO/${{ steps.extract_json.outputs.snapshot_acronym }}_Installpck.zip \
+            -o workflow/${{ steps.extract_json.outputs.snapshot_acronym }}/${{ steps.extract_json.outputs.snapshot_acronym }}_Installpck.zip \
             -H "Authorization: ZenApiKey $ZEN_API_KEY" \
             -H "BPMCSRFToken: ${{ steps.csrf_token.outputs.csrfkey }}" \
             -H "Accept: application/octet-stream"   
@@ -116,7 +116,7 @@ jobs:
         run: |
           echo "Install the package in the server"
           echo "Project Name: ${{ steps.extract_json.outputs.project_name }}"
-          response=$(curl -X POST "${{ steps.extract_json.outputs.server_url }}/bas/ops/std/bpm/containers/install?inactive=false&caseOverwrite=false" -F 'install_file=@workflow/CO/${{ steps.extract_json.outputs.snapshot_acronym }}_Installpck.zip' \
+          response=$(curl -X POST "${{ steps.extract_json.outputs.server_url }}/bas/ops/std/bpm/containers/install?inactive=false&caseOverwrite=false" -F 'install_file=@workflow/${{ steps.extract_json.outputs.snapshot_acronym }}/${{ steps.extract_json.outputs.snapshot_acronym }}_Installpck.zip' \
             -H "Authorization: ZenApiKey $ZEN_API_KEY" \
             -H "Accept: application/json" \
             -H "BPMCSRFToken: ${{ steps.csrf_token.outputs.csrfkey }}" )
