@@ -1,10 +1,10 @@
-name: CI/CD for EMAARS Project 
+name: CI/CD for MJ Project 
 
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'workflow/MJGI/**.json'
+    #paths:
+     # - 'workflow/MJGI/**.json'
   workflow_dispatch:
 
 jobs:
@@ -115,9 +115,9 @@ jobs:
         id: install_package
         run: |
           echo "Install the package in the server"
-          echo "Project Name: ${{ steps.extract_json.outputs.project_name }}"
-          response=$(curl -X POST "${{ steps.extract_json.outputs.server_url }}/bas/ops/std/bpm/containers/install?inactive=false&caseOverwrite=false" -F 'install_file=@workflow/${{ steps.extract_json.outputs.snapshot_acronym }}/${{ steps.extract_json.outputs.snapshot_acronym }}_Installpck.zip' \
-            -H "Authorization: ZenApiKey $ZEN_API_KEY" \
+          echo "Project Name: ${{ steps.extract_json.outputs.project_name }}"          
+          response=$(curl -X POST "$TARGET_SERVER/bas/ops/std/bpm/containers/install?inactive=false&caseOverwrite=false" -F 'install_file=@workflow/${{ steps.extract_json.outputs.snapshot_acronym }}/${{ steps.extract_json.outputs.snapshot_acronym }}_Installpck.zip' \
+            -H "Authorization: ZenApiKey $ZEN_API_KEY_TARGET" \
             -H "Accept: application/json" \
             -H "BPMCSRFToken: ${{ steps.csrf_token.outputs.csrfkey }}" )
           echo "Response: $response"
@@ -131,7 +131,7 @@ jobs:
           end=$((SECONDS+240))
           while true; do
           response=$(curl -s -X GET ${{ steps.install_package.outputs.joburl }} \
-            -H "Authorization: ZenApiKey $ZEN_API_KEY" \
+            -H "Authorization: ZenApiKey $ZEN_API_KEY_TARGET" \
             -H "Content-Type: application/json" \
             -H "BPMCSRFToken: ${{ steps.csrf_token.outputs.csrfkey }}" )
           echo "Response: $response"
