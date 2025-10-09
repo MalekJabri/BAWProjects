@@ -16,3 +16,8 @@ jobs:
         - name: Welcom Message
           run : |
             echo "Welcome to CI/CD "
+        - name: Checkout code
+          uses: actions/checkout@v4
+        - name: List Folders
+          run : |
+            ls -la
