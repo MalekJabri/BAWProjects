@@ -19,7 +19,7 @@ jobs:
       - name: Extract values from json file
         id: extract_json
         run: |
-          project_short_name="MJGI"
+          project_short_name="TOTO"
           echo "🎉 Showcase of CI/CD pipeline in the T3 EVENT project "
           echo "=== BAW Package Installation ==="
           echo "Date: $(date)"
