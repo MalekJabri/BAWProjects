@@ -1,0 +1,18 @@
+name: CI/CD for BAW Project 
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'workflow/SY1/**.json'
+  workflow_dispatch:
+
+jobs:
+  install_package:
+    runs-on: ubuntu-latest
+    env:
+      ZEN_API_KEY: ${{ secrets.ZEN_API_KEY }}
+    steps:
+        - name: Welcom Message
+          run : |
+            echo "Welcome to CI/CD "
