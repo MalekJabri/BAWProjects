@@ -19,11 +19,12 @@ jobs:
       - name: Extract values from json file
         id: extract_json
         run: |
-          echo "🎉 Showcase of CI/CD pipeline in the T3 EVENT  project "
+          project_short_name="MJGI"
+          echo "🎉 Showcase of CI/CD pipeline in the T3 EVENT project "
           echo "=== BAW Package Installation ==="
           echo "Date: $(date)"
           echo "::group::My Group"
-          newest_json=$(ls -t workflow/EMAARS/*.json | head -n 1)
+          newest_json=$(ls -t workflow/$project_short_name/*.json | head -n 1)
           echo "Extract information from the JSON file: $newest_json"
           server_url=$(jq -r '.server_url' $newest_json)
           snapshot_acronym=$(jq -r '.snapshot_acronym' $newest_json )
@@ -104,9 +105,9 @@ jobs:
       - name: Download the package
         id: download_package  
         run: |
-          echo "Job URL  : ${{ steps.extract_json.outputs.server_url }}/bas/ops/std/bpm/containers/${{ steps.extract_json.outputs.project_short_name }}/versions/${{ steps.extract_json.outputs.snapshot_acronym }}/install_package?server=Production"      
-          curl -X GET ${{ steps.extract_json.outputs.server_url }}/bas/ops/std/bpm/containers/${{ steps.extract_json.outputs.project_short_name }}/versions/${{ steps.extract_json.outputs.snapshot_acronym }}/install_package?server=Production \
-            -o workflow/${{ steps.extract_json.outputs.snapshot_acronym }}/${{ steps.extract_json.outputs.snapshot_acronym }}_Installpck.zip \
+          echo "Job URL  : ${{ steps.extract_json.outputs.server_url }}/bas/ops/std/bpm/containers/${{ steps.extract_json.outputs.project_short_name }}/versions/${{ steps.extract_json.outputs.snapshot_acronym }}/install_package?server=${{ secrets.target_profile }}"      
+          curl -X GET ${{ steps.extract_json.outputs.server_url }}/bas/ops/std/bpm/containers/${{ steps.extract_json.outputs.project_short_name }}/versions/${{ steps.extract_json.outputs.snapshot_acronym }}/install_package?server=${{ secrets.target_profile }} \
+            -o workflow/${{ steps.extract_json.outputs.project_short_name }}/${{ steps.extract_json.outputs.snapshot_acronym }}_Installpck.zip \
             -H "Authorization: ZenApiKey $ZEN_API_KEY" \
             -H "BPMCSRFToken: ${{ steps.csrf_token.outputs.csrfkey }}" \
             -H "Accept: application/octet-stream"   
