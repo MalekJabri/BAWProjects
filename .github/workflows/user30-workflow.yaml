@@ -1,4 +1,4 @@
-name: CI/CD for BAW Project 
+name: CI/CD for BAW-SY1 Project 
 
 on:
   push:
