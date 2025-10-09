@@ -1,8 +1,8 @@
 name: CI/CD for MJ Project 
 
 on:
-  push:
-    branches: [ main ]
+  #push:
+    #branches: [ main ]
     #paths:
      # - 'workflow/MJGI/**.json'
   workflow_dispatch:
@@ -112,15 +112,34 @@ jobs:
             -H "BPMCSRFToken: ${{ steps.csrf_token.outputs.csrfkey }}" \
             -H "Accept: application/octet-stream"   
           echo "Package downloaded successfully."      
+      - name: Get CSRF token Target Server
+        id: csrf_token_target
+        run: |
+          echo "Project Name: ${{ steps.extract_json.outputs.project_name }}"
+          url=${{ secrets.TARGET_SERVER }}
+          echo "url: $url"
+          response=$(curl -s -X POST $url/wfpsruntime-test-wfps/ops/system/login \
+            -H "Authorization: ZenApiKey ${{ secrets.ZEN_API_KEY_TARGET }}" \
+            -H "Content-Type: application/json" \
+            -d '{ "refresh_groups": true, "requested_lifetime": 7200}')
+          echo "Response: $response"
+          csrfkey=$(echo "$response" | jq -r '.csrf_token')
+          echo "Extracted csrfkey: $csrfkey"
+          echo "csrf_token_target=$csrfkey" >> $GITHUB_OUTPUT
+
       - name: Install the package
         id: install_package
         run: |
           echo "Install the package in the server"
-          echo "Project Name: ${{ steps.extract_json.outputs.project_name }}"          
-          response=$(curl -X POST "$TARGET_SERVER/bas/ops/std/bpm/containers/install?inactive=false&caseOverwrite=false" -F 'install_file=@workflow/${{ steps.extract_json.outputs.snapshot_acronym }}/${{ steps.extract_json.outputs.snapshot_acronym }}_Installpck.zip' \
-            -H "Authorization: ZenApiKey $ZEN_API_KEY_TARGET" \
+          echo "CRF TOKEN: ${{ steps.csrf_token_target.outputs.csrf_token_target }}"
+          echo "Project Name: ${{ steps.extract_json.outputs.project_name }}"     
+          tt=${{ secrets.TARGET_SERVER }}
+          echo "Target Server: $tt"     
+          echo "Target Server URL: $tt/wfpsruntime-test-wfps/ops/std/bpm/containers/install?inactive=false&caseOverwrite=false"
+          response=$(curl -X POST "$tt/wfpsruntime-test-wfps/ops/std/bpm/containers/install?inactive=false&caseOverwrite=false" -F 'install_file=@workflow/${{ steps.extract_json.outputs.project_short_name }}/${{ steps.extract_json.outputs.snapshot_acronym }}_Installpck.zip;type=application/zip' \
+            -H "Authorization: ZenApiKey ${{ secrets.ZEN_API_KEY_TARGET }}" \
             -H "Accept: application/json" \
-            -H "BPMCSRFToken: ${{ steps.csrf_token.outputs.csrfkey }}" )
+            -H "BPMCSRFToken: ${{ steps.csrf_token_target.outputs.csrf_token_target }}" )
           echo "Response: $response"
           url=$(echo "$response" | jq -r '.url')
           echo "install queue package url: $url"
@@ -132,9 +151,9 @@ jobs:
           end=$((SECONDS+240))
           while true; do
           response=$(curl -s -X GET ${{ steps.install_package.outputs.joburl }} \
-            -H "Authorization: ZenApiKey $ZEN_API_KEY_TARGET" \
+            -H "Authorization: ZenApiKey ${{ secrets.ZEN_API_KEY_TARGET }}" \
             -H "Content-Type: application/json" \
-            -H "BPMCSRFToken: ${{ steps.csrf_token.outputs.csrfkey }}" )
+            -H "BPMCSRFToken: ${{ steps.csrf_token_target.outputs.csrf_token_target }}" )
           echo "Response: $response"
           state=$(echo "$response" | jq -r '.state')
           echo "The status of the package creation is: $state"
