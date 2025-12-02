@@ -89,7 +89,11 @@ This repository is provided for educational and demonstration purposes only.
 
 ---
 
+## Create API Key 
+
+
 Feel free to adapt or improve this README as your lab evolves!
 
 
 ZENAPIKEY : printf "myusername:myapikey" | base64
+
