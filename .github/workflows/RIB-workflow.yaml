@@ -115,7 +115,7 @@ jobs:
           echo "Project Name: ${{ steps.extract_json.outputs.project_name }}"
           url=${{ secrets.TARGET_SERVER }}
           echo "url: $url"
-          response=$(curl -s -X POST $url/wfpsruntime-test-wfps/ops/system/login \
+          response=$(curl -s -X POST $url/bas/ops/system/login \
             -H "Authorization: ZenApiKey ${{ secrets.ZEN_API_KEY_TARGET }}" \
             -H "Content-Type: application/json" \
             -d '{ "refresh_groups": true, "requested_lifetime": 7200}')
@@ -131,8 +131,8 @@ jobs:
           echo "Project Name: ${{ steps.extract_json.outputs.project_name }}"     
           target_server=${{ secrets.TARGET_SERVER }}
           echo "Target Server: $target_server"     
-          echo "Target Server URL: $target_server/wfpsruntime-test-wfps/ops/std/bpm/containers/install?inactive=false&caseOverwrite=false"
-          response=$(curl -X POST "$target_server/wfpsruntime-test-wfps/ops/std/bpm/containers/install?inactive=false&caseOverwrite=false" -F 'install_file=@workflow/${{ steps.extract_json.outputs.project_short_name }}/${{ steps.extract_json.outputs.snapshot_acronym }}_Installpck.zip;type=application/zip' \
+          echo "Target Server URL: $target_server/bas/ops/std/bpm/containers/install?inactive=false&caseOverwrite=false"
+          response=$(curl -X POST "$target_server/bas/ops/std/bpm/containers/install?inactive=false&caseOverwrite=false" -F 'install_file=@workflow/${{ steps.extract_json.outputs.project_short_name }}/${{ steps.extract_json.outputs.snapshot_acronym }}_Installpck.zip;type=application/zip' \
             -H "Authorization: ZenApiKey ${{ secrets.ZEN_API_KEY_TARGET }}" \
             -H "Accept: application/json" \
             -H "BPMCSRFToken: ${{ steps.csrf_token_target.outputs.csrf_token_target }}" )
